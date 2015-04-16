@@ -14,7 +14,7 @@ arch=(x86_64 i686)
 url="http://www.rtai.org/"
 license=('GPL')
 depends=()
-makedepends=( ncurses dialog gcc make patch )
+makedepends=( ncurses gcc make patch )
 checkdepends=()
 optdepends=()
 provides=()
@@ -69,8 +69,8 @@ prepare() {
 	# Here we download the kernel version we need
 	cd $srcdir
 	echo "Download and/or check linux-$_kernver tarball"
-	rsync --no-motd -P rsync://rsync.kernel.org/pub/linux/kernel/v$(echo $_kernver | cut -c 1).x/linux-$_kernver.tar.xz \
-	       linux-$_kernver.tar.xz
+#	rsync -P --no-motd rsync://rsync.kernel.org/pub/linux/kernel/v$(echo $_kernver | cut -c 1).x/linux-$_kernver.tar.xz \
+#	       linux-$_kernver.tar.xz
 	tar xf linux-$_kernver.tar.xz
 
 	# Here we deploy the patches and the config
@@ -88,11 +88,21 @@ prepare() {
 	make olddefconfig
 	# and configure it more if we wish to
 	# make menuconfig
+
+	cd $srcdir/rtai-$pkgver/
+	timeout 1s make oldconfig  &>/dev/null|| echo "Configured RTAI"
+	sed -i=.orig \
+		-e "s,.*CONFIG_RTAI_LINUXDIR.*,CONFIG_RTAI_LINUXDIR='$srcdir/linux-$_kernver'," \
+		-e "s,.*CONFIG_RTAI_CPUS.*,CONFIG_RTAI_CPUS='`nproc`'," \
+	       	.rtai_config
+
 }
 
 build() {
 	cd "$srcdir/linux-$_kernver"
 	make -j`expr $(nproc) + 1`
+	cd "$srcdir/rtai-$pkgver"
+	make
 }
 
 package() {
