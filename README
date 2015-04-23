@@ -1,1 +1,3 @@
-I have just packaged the kernel part, need still to do the user space and overall, need to sleep, so no license for the moment (GPLv2 if possible)
+This package is rtai, with a kernel, packaged.
+
+The idea is to have an all in one, so that you can update rtai and the kernel at the same time, avoiding collisions that could occur.

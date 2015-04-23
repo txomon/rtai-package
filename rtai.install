@@ -1,0 +1,13 @@
+post_install () {
+  echo "Running depmod..."
+  depmod_name=`basename /lib/modules/*-rtai`
+  depmod -v $depmod_name > /dev/null 2>&1
+  #Make the initial ramdisk
+  echo "Creating the initrd..."
+  /sbin/mkinitcpio -p rtai-linux
+  echo "You must now edit menu.lst or grub.cfg and add vmlinuz-rtai and rtai-initrd.img to the file"
+  echo "If using GRUB, might be easier to run grub-mkconfig"
+  echo "For a significant improvement in latency..."
+  echo "Please add the following on the kernel command line within the GRUB file:"
+  echo "isolcpus=1"
+}
