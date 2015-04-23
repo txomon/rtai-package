@@ -69,8 +69,8 @@ kernel_prepare() {
 	# Here we download the kernel version we need
 	cd $srcdir
 	echo "Download and/or check linux-$_kernver tarball"
-#	rsync -P --no-motd rsync://rsync.kernel.org/pub/linux/kernel/v$(echo $_kernver | cut -c 1).x/linux-$_kernver.tar.xz \
-#	       linux-$_kernver.tar.xz
+	rsync -P --no-motd rsync://rsync.kernel.org/pub/linux/kernel/v$(echo $_kernver | cut -c 1).x/linux-$_kernver.tar.xz \
+	       linux-$_kernver.tar.xz
 	tar xf linux-$_kernver.tar.xz
 
 	# Here we deploy the patches and the config
