@@ -129,18 +129,18 @@ kernel_package() {
 	make headers_install INSTALL_HDR_PATH=$pkgdir/usr/src/linux-$_kernver
 
 	# Install modules
-	make INSTALL_MOD_PATH=$pkgdir modules_install
+	make INSTALL_MOD_PATH=$pkgdir/usr modules_install
 
 	# Correct build path to deployed headers
-	rm $pkgdir/lib/modules/$_kernver-rtai/build
-	ln -s /usr/src/linux-$_kernver $pkgdir/lib/modules/$_kernver-rtai/build
+	rm $pkgdir/usr/lib/modules/$_kernver-rtai/build
+	ln -s /usr/src/linux-$_kernver $pkgdir/usr/lib/modules/$_kernver-rtai/build
 
 	# Install image
 	mkdir $pkgdir/boot
 	cp arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-rtai
 
 	# Remove firmware files, as they are provided by another package
-	rm -rf $pkgdir/lib/firmware
+	rm -rf $pkgdir/usr/lib/firmware
 
 	#Install preset file for mkinitcpio
 	mkdir -p $pkgdir/etc/mkinitcpio.d
