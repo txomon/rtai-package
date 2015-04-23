@@ -123,8 +123,19 @@ rtai_build(){
 
 kernel_package() {
 	cd $srcdir/linux-$_kernver 
+
+	# Install kernel headers
+	mkdir -p $pkgdir/usr/src/linux-$_kernver
+	make headers_install INSTALL_HDR_PATH=$pkgdir/usr/src/linux-$_kernver
+
+	# Install modules
 	make INSTALL_MOD_PATH=$pkgdir modules_install
 
+	# Correct build path to deployed headers
+	rm $pkgdir/lib/modules/$_kernver-rtai/build
+	ln -s /usr/src/linux-$_kernver $pkgdir/lib/modules/$_kernver-rtai/build
+
+	# Install image
 	mkdir $pkgdir/boot
 	cp arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-rtai
 
@@ -133,13 +144,8 @@ kernel_package() {
 
 	#Install preset file for mkinitcpio
 	mkdir -p $pkgdir/etc/mkinitcpio.d
+	install -m644 -D $srcdir/linux-${pkgname}.preset $pkgdir/etc/mkinitcpio.d/linux-${pkgname}.preset
 
-	# Install mkinitcpio preset
-	install -m644 -D $srcdir/linux-${pkgname}.preset $pkgdir/etc/mkinitcpio.d/linux-${pkgname}.preset || return 1
-
-	#Install kernel source
-	mkdir -p $pkgdir/usr/src
-	cp -PR $srcdir/linux-$_kernver $pkgdir/usr/src/
 	echo "Finished kernel_package"
 }
 
