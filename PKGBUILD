@@ -9,7 +9,7 @@ pkgver=4.1
 # If you wish not to use the most recent kernel
 _kernver=3.8.13
 pkgrel=1
-pkgdesc="RTAI kernel instalation"
+pkgdesc="RTAI kernel and tools"
 arch=(x86_64 i686)
 url="http://www.rtai.org/"
 license=('GPL')
