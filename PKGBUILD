@@ -88,7 +88,6 @@ prepare() {
 	make olddefconfig
 	# and configure it more if we wish to
 	# make menuconfig
-
 	cd $srcdir/rtai-$pkgver/
 	timeout 1s make oldconfig  &>/dev/null|| echo "Configured RTAI"
 	sed -i=.orig \
@@ -102,7 +101,7 @@ build() {
 	cd "$srcdir/linux-$_kernver"
 	make -j`expr $(nproc) + 1`
 	cd "$srcdir/rtai-$pkgver"
-	make
+	make config.status -j`expr $(nproc) + 1`
 }
 
 package() {
@@ -125,4 +124,8 @@ package() {
 	#Install kernel source and config for RTAI userspace
 	mkdir -p $pkgdir/usr/src
 	cp -PR $srcdir/linux-$_kernver $pkgdir/usr/src/
+
+	cd "$srcdir/rtai-$pkgver"
+	make install DESTDIR=$pkgdir
+
 }
