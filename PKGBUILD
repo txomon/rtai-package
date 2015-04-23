@@ -87,7 +87,11 @@ kernel_prepare() {
 		-e "s,.*CONFIG_LOCALVERSION.*,CONFIG_LOCALVERSION='-rtai'," \
 		.config
 
-	cp $srcdir/packages/trunk/linux.preset $srcdir/
+	cp $srcdir/packages/trunk/linux.preset $srcdir/linux-rtai.preset
+	sed -i  -e "s,vmlinuz-linux,vmlinuz-rtai," \
+		-e "s,default_image=.*,default_image='/boot/rtai-default.img'," \
+		-e "s,fallback_image=.*,fallback_image='/boot/rtai-fallback.img'," \
+		$srcdir/linux-rtai.preset
 
 	# Here we configure the kernel
 	make olddefconfig
