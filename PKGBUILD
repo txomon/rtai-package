@@ -89,8 +89,8 @@ kernel_prepare() {
 
 	cp $srcdir/packages/trunk/linux.preset $srcdir/linux-rtai.preset
 	sed -i  -e "s,vmlinuz-linux,vmlinuz-rtai," \
-		-e "s,default_image=.*,default_image='/boot/rtai-default.img'," \
-		-e "s,fallback_image=.*,fallback_image='/boot/rtai-fallback.img'," \
+		-e "s,default_image=.*,default_image='/boot/initramfs-rtai.img'," \
+		-e "s,fallback_image=.*,fallback_image='/boot/initramfs-rtai-fallback.img'," \
 		$srcdir/linux-rtai.preset
 
 	# Here we configure the kernel
